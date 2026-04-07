@@ -145,8 +145,8 @@ function setupEventListeners(): void {
   // Map click handler for adding waypoints
   const map = mapComponent.getMap();
   if (map) {
-    map.on('click', async (e: MouseEvent) => {
-      const latlng = map.getContainerPoint(e.clientX, e.clientY).latLng;
+    map.on('click', async (e: L.MouseEvent) => {
+      const latlng = map.containerPointToLatLng({ x: e.clientX, y: e.clientY });
       
       // Update waypoint inputs
       const startPointEl = document.getElementById('start-point') as HTMLInputElement;

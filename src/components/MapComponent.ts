@@ -49,13 +49,20 @@ export class MapComponent {
    * Setup custom waypoint markers
    */
   private setupWaypointMarkers(): void {
-    this.waypointsLayer = L.layerGroup().addTo(this.map);
+    if (this.map) {
+      this.waypointsLayer = L.layerGroup().addTo(this.map);
+    }
   }
 
   /**
    * Render a route on the map
    */
   renderRoute(route: Route): void {
+    // Ensure map is initialized
+    if (!this.map) {
+      return;
+    }
+
     // Remove existing route if present
     if (this.routeLayer) {
       this.map.removeLayer(this.routeLayer);
@@ -91,7 +98,7 @@ export class MapComponent {
    * Remove route from map
    */
   clearRoute(): void {
-    if (this.routeLayer) {
+    if (this.routeLayer && this.map) {
       this.map.removeLayer(this.routeLayer);
       this.routeLayer = null;
     }
@@ -101,6 +108,10 @@ export class MapComponent {
    * Add a waypoint marker to the map
    */
   addWaypointMarker(location: [number, number]): L.Marker {
+    if (!this.waypointsLayer || !this.map) {
+      return L.marker(location);
+    }
+
     const marker = L.marker(location, {
       icon: this.createCustomIcon(),
     }).addTo(this.waypointsLayer);
@@ -139,7 +150,7 @@ export class MapComponent {
    * Fit map to show all waypoints and route
    */
   fitBounds(waypoints: [number, number][]): void {
-    if (waypoints.length >= 2) {
+    if (waypoints.length >= 2 && this.map) {
       const bounds = L.latLngBounds(waypoints);
       this.map.fitBounds(bounds, { padding: [50, 50] });
     }

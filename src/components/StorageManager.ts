@@ -24,7 +24,7 @@ export class StorageManager {
       const stored = localStorage.getItem(STORAGE_KEY_SETTINGS);
       if (stored) {
         this.settings = JSON.parse(stored);
-        return this.settings;
+        return this.getSettings();
       }
       
       // Default settings if none exist
